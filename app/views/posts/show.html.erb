@@ -1,1 +1,25 @@
+<h1><%= @post.title %></h1>
+<p><%= @post.content %></p>
 
+<h3>Comments</h3>
+<% @post.comments.each do |comment| %>
+  <p><strong><%= comment.user.username %> says</strong>: <%= comment.content %></p>
+<% end %>
+
+<h4>Add new comment</h4>
+<%= form_for :comment, url: comments_path do |f| %>
+  <%= f.hidden_field :post_id, value: @post.id %>
+  <div class="field">
+    <p>Username</p>
+    <%= f.select :user_id do %>
+      <% User.all.each do |user| %>
+        <%= content_tag(:option, user.username, value: user.id) %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="field">
+    <p>Content</p>
+    <%= f.text_area :content %>
+  </div>
+  <button>Create Comment</button>
+<% end %>
